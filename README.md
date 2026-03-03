@@ -7,6 +7,7 @@ Auto-configures memory cards, video modes, and input settings before launching P
 ## 🎯 Purpose
 
 Simplify PS1/PS2 emulator behavior configuration on PS3 by:
+
 - Pre-setting analog/digital input modes per console
 - Configuring video modes (normal/full-screen)
 - Mapping virtual memory cards to emulator slots
@@ -55,6 +56,7 @@ ps3-config
 ```
 
 Menu-driven interface for:
+
 - Listing games and VMCs
 - Configuring per-game settings
 - Uploading launchers
@@ -70,38 +72,40 @@ Webman → Game → Automatic launcher applies settings before emulator launch
 
 ### Python Package (`src/ps3tweaks/`)
 
-| Module | Role |
-|--------|------|
-| `config.py` | Emulator configuration dataclasses (PS1/PS2 defaults) |
-| `utils.py` | SSH/SFTP client + JSON config persistence |
-| `manager.py` | High-level orchestration (list/configure/upload) |
-| `cli.py` | Interactive menu interface |
+| Module       | Role                                                  |
+| ------------ | ----------------------------------------------------- |
+| `config.py`  | Emulator configuration dataclasses (PS1/PS2 defaults) |
+| `utils.py`   | SSH/SFTP client + JSON config persistence             |
+| `manager.py` | High-level orchestration (list/configure/upload)      |
+| `cli.py`     | Interactive menu interface                            |
 
 ### Shell Scripts (`scripts/`)
 
-| Script | Purpose |
-|--------|---------|
-| `install.sh` | Deploy to PS3, create VMC files, upload launchers |
-| `webman_integration.sh` | Runtime hook: pre-launch setup |
-| `utilities.sh` | Diagnostics, VMC backup/restore, log viewing |
+| Script                  | Purpose                                           |
+| ----------------------- | ------------------------------------------------- |
+| `install.sh`            | Deploy to PS3, create VMC files, upload launchers |
+| `webman_integration.sh` | Runtime hook: pre-launch setup                    |
+| `utilities.sh`          | Diagnostics, VMC backup/restore, log viewing      |
 
 ### Tools (`tools/`)
 
-| Tool | Purpose |
-|------|---------|
+| Tool                 | Purpose                                        |
+| -------------------- | ---------------------------------------------- |
 | `download_covers.py` | Download game covers from TheGamesDB/RetroArch |
-| `dev_env.sh` | Virtual environment activation helper |
+| `dev_env.sh`         | Virtual environment activation helper          |
 
 ## 📝 Configuration
 
 ### Default Emulator Settings
 
 **PS1 (`ps1_netemu.self`):**
+
 - Analog mode: **enabled**
 - Video mode: **normal**
 - Memory card: `PS1_slot1.vmc`
 
 **PS2 (`ps2_netemu.self`):**
+
 - Analog mode: **disabled**
 - Video mode: **fullscreen**
 - Memory card: `PS2_slot1.vmc`
@@ -127,7 +131,7 @@ Configuration stored in `config/ps3_emulator_config.json`:
 
 ### Project Structure
 
-```
+```text
 ps3tweaks/
 ├── .github/
 │   └── copilot-instructions.md      # Engineering standards
@@ -165,6 +169,7 @@ pre-commit run -a
 ```
 
 Enforces:
+
 - Python AST validation
 - Import sorting (isort)
 - Code formatting (black)
@@ -194,7 +199,7 @@ Enforces:
 
 ### Runtime Flow (PS3)
 
-```
+```text
 Webman Launch → /dev_hdd0/ps3tweaks/launcher_ps1.sh
     ↓
 webman_integration.sh (apply settings)
@@ -216,16 +221,19 @@ Executive ps1_netemu.self with game ISO
 ## 🐛 Troubleshooting
 
 ### SSH Connection Fails
+
 - Confirm SSH is enabled on PS3 (Dev Tools)
 - Verify PS3 IP is reachable (`ping 192.168.1.100`)
 - Check firewall allows SSH (port 22)
 
 ### VMCs Not Applied
+
 - Verify files exist: `ls -la /dev_hdd0/vmc/`
 - Check launcher logs: `cat /dev_hdd0/ps3tweaks/launcher.log`
 - Permissions: `chmod 666 /dev_hdd0/vmc/*.vmc`
 
 ### Game-Specific Issues
+
 - Review per-game config in `config/ps3_emulator_config.json`
 - Reset to defaults by removing the game entry
 - Rerun `ps3-config` to reconfigure
@@ -239,6 +247,7 @@ This project is provided as-is for PS3 Custom Firmware enthusiasts.
 ## 🤝 Contributing
 
 Improvements welcome! Ensure:
+
 - All tests pass (`pytest`)
 - Coverage ≥ 80%
 - Code passes all linters (`pre-commit run -a`)
@@ -248,6 +257,7 @@ Improvements welcome! Ensure:
 ## 📞 Support
 
 For issues or questions:
+
 1. Check [QUICKSTART.md](docs/QUICKSTART.md) and [docs/README.md](docs/README.md)
 2. Review troubleshooting section above
 3. Open an issue with:
