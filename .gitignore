@@ -1,0 +1,64 @@
+# Environment
+.venv/
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+.pytest_cache/
+.tox/
+.coverage
+htmlcov/
+
+# Logs
+*.log
+*.log.*
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+/tmp/
+.cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+ps3_emulator_config.json.bak
+ps3_emulator_config.json (não usar padrão final)
+*.bak
+.env.local

@@ -1,0 +1,36 @@
+{
+  "ps1_default": {
+    "emulator_type": "ps1_netemu.self",
+    "memory_card_slot1": "PS1_slot1.vmc",
+    "video_mode": "normal",
+    "analog_mode": true,
+    "screen_size": "normal"
+  },
+  "ps2_default": {
+    "emulator_type": "ps2_netemu.self",
+    "memory_card_slot1": "PS2_slot1.vmc",
+    "video_mode": "fullscreen",
+    "analog_mode": false,
+    "screen_size": "fullscreen"
+  },
+  "games": {
+    "Metal Gear Solid": {
+      "console": "ps1",
+      "memory_card_slot1": "PS1_slot1.vmc",
+      "video_mode": "normal",
+      "analog_mode": true
+    },
+    "Metal Gear Solid 2": {
+      "console": "ps2",
+      "memory_card_slot1": "PS2_slot1.vmc",
+      "video_mode": "fullscreen",
+      "analog_mode": false
+    },
+    "Final Fantasy VII": {
+      "console": "ps1",
+      "memory_card_slot1": "PS1_slot1.vmc",
+      "video_mode": "normal",
+      "analog_mode": true
+    }
+  }
+}
