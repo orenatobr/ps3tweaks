@@ -66,6 +66,88 @@ Menu-driven interface for:
 
 Webman → Game → Automatic launcher applies settings before emulator launch
 
+### 6. Mark Covers as Completed (FTP)
+
+Use this flow to download a cover from PS3 FTP, add a completion badge in the top-left corner
+(about 15% of the image), and upload it back.
+
+#### Environment Setup
+
+```bash
+cd ~/Workspace/ps3tweaks
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+If your venv was created without `pip`:
+
+```bash
+python -m ensurepip --upgrade
+python -m pip install --upgrade pip setuptools wheel
+```
+
+Install the project so the `ps3-mark-complete` command becomes available:
+
+```bash
+python -m pip install -e .
+```
+
+#### FTP Config
+
+Edit `config/ps3_ftp_config.yml`:
+
+```yaml
+ftp:
+  host: "192.168.1.85"
+  port: 21
+  user: "anonymous"
+  password: ""
+
+badge_ratio: 0.15
+```
+
+#### Usage
+
+Single image:
+
+```bash
+ps3-mark-complete \
+  --remote-path "/dev_hdd0/PS2ISO/Grandia III (USA) (Disc 1).png" \
+  --output "output/grandia3-disc1-done.png"
+```
+
+Two images (Disc 1 + Disc 2):
+
+```bash
+ps3-mark-complete \
+  --remote-path "/dev_hdd0/PS2ISO/Grandia III (USA) (Disc 1).png" \
+  --output "output/grandia3-disc1-done.png"
+
+ps3-mark-complete \
+  --remote-path "/dev_hdd0/PS2ISO/Grandia III (USA) (Disc 2).png" \
+  --output "output/grandia3-disc2-done.png"
+```
+
+Local test only (do not upload back to PS3):
+
+```bash
+ps3-mark-complete \
+  --remote-path "/dev_hdd0/PS2ISO/Grandia III (USA) (Disc 1).png" \
+  --output "output/grandia3-disc1-done.png" \
+  --no-upload
+```
+
+If needed, you can run without console script entrypoint:
+
+```bash
+python -m ps3tweaks.ftp_cover_marker \
+  --remote-path "/dev_hdd0/PS2ISO/Grandia III (USA) (Disc 1).png" \
+  --output "output/grandia3-disc1-done.png"
+```
+
+Note: FTP URLs with `%20`, `%28`, `%29` should be passed as normal remote paths with spaces and
+parentheses in `--remote-path`.
+
 ---
 
 ## 🏗️ Architecture

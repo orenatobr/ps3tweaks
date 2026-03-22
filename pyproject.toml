@@ -26,6 +26,7 @@ dev = [
 
 [project.scripts]
 ps3-config = "ps3tweaks.cli:main"
+ps3-mark-complete = "ps3tweaks.ftp_cover_marker:main"
 
 [tool.setuptools]
 packages = ["ps3tweaks"]

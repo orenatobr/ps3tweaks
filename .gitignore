@@ -62,3 +62,5 @@ ps3_emulator_config.json.bak
 ps3_emulator_config.json (não usar padrão final)
 *.bak
 .env.local
+output/
+.ruff_cache/

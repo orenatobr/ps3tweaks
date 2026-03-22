@@ -1,0 +1,8 @@
+ftp:
+  host: "192.168.1.85"
+  port: 21
+  user: "anonymous"
+  password: ""
+
+# Fraction of the shortest image side used for the completion badge size.
+badge_ratio: 0.15
