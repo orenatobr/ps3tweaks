@@ -42,7 +42,7 @@ repos:
     hooks:
       - id: pytest-coverage
         name: pytest with coverage >= 80%
-        entry: pytest -q --cov=src/ps3tweaks --cov-report=term-missing --cov-fail-under=80
+        entry: .venv/bin/pytest -q --cov=src/ps3tweaks --cov-report=term-missing --cov-fail-under=80
         language: system
         pass_filenames: false
         stages: [pre-push]
