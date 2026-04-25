@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import ftplib
 import logging
+import urllib.parse
 from dataclasses import dataclass
 from io import BytesIO
 from pathlib import Path
@@ -241,13 +242,15 @@ def process_remote_cover(
 
     Args:
         config_path: YAML settings file path.
-        remote_path: Remote image path in the PS3 FTP server.
+        remote_path: Remote image path in the PS3 FTP server. Accepts URL-encoded
+            paths (e.g. copied from FileZilla) and decodes them automatically.
         output_path: Local output image path.
         upload: Whether to upload the edited image back to PS3.
 
     Returns:
         Local output path where the edited image was saved.
     """
+    remote_path = urllib.parse.unquote(remote_path)
     settings = load_settings(config_path)
     logger.info(
         "Starting remote cover processing",

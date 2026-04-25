@@ -137,6 +137,17 @@ ps3-mark-complete \
   --no-upload
 ```
 
+URL-encoded paths (copied directly from FileZilla or similar FTP clients) are decoded automatically:
+
+```bash
+ps3-mark-complete \
+  --remote-path "/dev_hdd0/PS2ISO/Grandia%20III%20%28USA%29%20%28Disc%201%29.png" \
+  --output "output/grandia3-disc1-done.png"
+```
+
+Both forms are equivalent — plain paths with spaces/parentheses and URL-encoded paths produce the
+same result.
+
 If needed, you can run without console script entrypoint:
 
 ```bash
@@ -144,9 +155,6 @@ python -m ps3tweaks.ftp_cover_marker \
   --remote-path "/dev_hdd0/PS2ISO/Grandia III (USA) (Disc 1).png" \
   --output "output/grandia3-disc1-done.png"
 ```
-
-Note: FTP URLs with `%20`, `%28`, `%29` should be passed as normal remote paths with spaces and
-parentheses in `--remote-path`.
 
 ---
 

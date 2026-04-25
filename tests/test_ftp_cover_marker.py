@@ -135,3 +135,68 @@ def test_process_remote_cover_downloads_marks_and_uploads(
     assert result_path == output_path
     assert output_path.exists()
     assert uploaded_payloads
+
+
+def test_process_remote_cover_decodes_url_encoded_path(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    """Validate that URL-encoded remote paths (e.g. from FileZilla) are decoded before FTP use.
+
+    Args:
+        monkeypatch: Pytest monkeypatch fixture.
+        tmp_path: Temporary pytest path fixture.
+    """
+    original_bytes = _build_test_image_bytes()
+    decoded_path = "/dev_hdd0/PS2ISO/Grandia III (USA) (Disc 1).png"
+    encoded_path = "/dev_hdd0/PS2ISO/Grandia%20III%20%28USA%29%20%28Disc%201%29.png"
+
+    class FakeFTP:
+        """In-memory fake FTP client that asserts the path was decoded."""
+
+        def __enter__(self) -> FakeFTP:
+            return self
+
+        def __exit__(self, exc_type: object, exc: object, tb: object) -> None:
+            return None
+
+        def connect(self, host: str, port: int) -> None:
+            pass
+
+        def login(self, user: str, passwd: str) -> None:
+            pass
+
+        def retrbinary(self, command: str, callback: Callable[[bytes], object]) -> None:
+            assert (
+                command == f"RETR {decoded_path}"
+            ), f"Expected decoded path in RETR command, got: {command!r}"
+            callback(original_bytes)
+
+        def storbinary(self, command: str, file_obj: BytesIO) -> None:
+            assert command == f"STOR {decoded_path}"
+
+    monkeypatch.setattr(ftplib, "FTP", FakeFTP)
+
+    config_file = tmp_path / "ps3_ftp.yml"
+    config_file.write_text(
+        (
+            "ftp:\n"
+            '  host: "127.0.0.1"\n'
+            "  port: 21\n"
+            '  user: "anonymous"\n'
+            '  password: ""\n'
+            "badge_ratio: 0.15\n"
+        ),
+        encoding="utf-8",
+    )
+
+    output_path = tmp_path / "result.png"
+    result_path = process_remote_cover(
+        config_path=config_file,
+        remote_path=encoded_path,
+        output_path=output_path,
+        upload=True,
+    )
+
+    assert result_path == output_path
+    assert output_path.exists()
