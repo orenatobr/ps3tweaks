@@ -3,10 +3,12 @@
 import sys
 from pathlib import Path
 
-from PIL import Image
+import pytest
+from PIL import Image, features
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+import normalize_icons  # noqa: E402
 from normalize_icons import FRAME_SIZE, find_images, process_image  # noqa: E402
 
 
@@ -151,3 +153,46 @@ def test_dry_run_makes_no_changes(tmp_path: Path) -> None:
 
     assert path.exists()
     assert list(tmp_path.iterdir()) == [path]
+
+
+def test_existing_png_is_not_overwritten_by_other_format(tmp_path: Path) -> None:
+    """A different image with the target .png name must survive a conversion.
+
+    Args:
+        tmp_path: Temporary directory fixture from pytest.
+
+    Returns:
+        None.
+    """
+    source = tmp_path / "game.jpg"
+    Image.new("RGB", (300, 200), "green").save(source, "JPEG")
+    existing = tmp_path / "game.png"
+    Image.new("RGB", (50, 50), "blue").save(existing, "PNG")
+
+    with pytest.raises(FileExistsError):
+        process_image(str(source))
+
+    assert source.exists()
+    with Image.open(existing) as result:
+        assert result.size == (50, 50)
+
+
+@pytest.mark.skipif(not features.check("avif"), reason="Pillow built without AVIF support")
+def test_main_counts_undecodable_file_as_error(tmp_path: Path, monkeypatch, capsys) -> None:
+    """An undecodable file is reported as an error and does not abort the run.
+
+    Args:
+        tmp_path: Temporary directory fixture from pytest.
+        monkeypatch: Pytest monkeypatch fixture.
+        capsys: Pytest capture fixture.
+
+    Returns:
+        None.
+    """
+    (tmp_path / "bad.avif").write_bytes(b"not an image")
+    monkeypatch.setattr(normalize_icons, "ROOT", str(tmp_path))
+    monkeypatch.setattr(sys, "argv", ["normalize_icons.py", "--yes"])
+
+    normalize_icons.main()
+
+    assert "errors: 1" in capsys.readouterr().out
