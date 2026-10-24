@@ -151,3 +151,16 @@ def test_get_status_snapshot(manager: PS3EmulatorManager) -> None:
     assert snapshot["vmcs"]["PS1_slot1.vmc"] == "131072"
     assert "Metal Gear Solid.iso" in snapshot["ps1_games"]
     assert "God of War.iso" in snapshot["ps2_games"]
+
+
+def test_generate_launcher_script_invalid_console(manager: PS3EmulatorManager) -> None:
+    """Reject launcher generation for an unknown console.
+
+    Args:
+        manager: Manager fixture.
+
+    Returns:
+        None.
+    """
+    with pytest.raises(ValueError):
+        manager.generate_launcher_script("ps9")
