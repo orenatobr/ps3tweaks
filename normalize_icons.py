@@ -40,15 +40,21 @@ def process_image(path, dry_run=False):
     canvas.paste(img, (x, y), img)
 
     same_path = os.path.exists(out_path) and os.path.samefile(out_path, path)
+    # A different file already owns the target name (e.g. game.jpg next to game.png).
+    collision = not same_path and os.path.exists(out_path)
 
     if dry_run:
-        action = (
-            "overwrite (already .png)"
-            if same_path
-            else f"-> {os.path.basename(out_path)} (original deleted)"
-        )
+        if collision:
+            action = f"skipped ({os.path.basename(out_path)} already exists)"
+        elif same_path:
+            action = "overwrite (already .png)"
+        else:
+            action = f"-> {os.path.basename(out_path)} (original deleted)"
         print(f"  [dry-run] {path} {action}")
         return
+
+    if collision:
+        raise FileExistsError(f"{out_path} already exists and is a different file")
 
     canvas.save(out_path, "PNG")
 
